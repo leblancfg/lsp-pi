@@ -1,0 +1,36 @@
+{
+  "name": "lsp-pi",
+  "version": "0.1.0",
+  "description": "Language Server Protocol integration for pi-coding-agent",
+  "keywords": ["pi-package"],
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:tool": "vitest run --config vitest.tool.config.ts",
+    "test:integration": "vitest run --config vitest.integration.config.ts",
+    "check": "tsc --noEmit",
+    "clean": "rm -rf node_modules"
+  },
+  "pi": {
+    "extensions": [
+      "./src/lsp.ts",
+      "./src/lsp-tool.ts"
+    ]
+  },
+  "peerDependencies": {
+    "@mariozechner/pi-ai": "*",
+    "@mariozechner/pi-coding-agent": "*",
+    "@mariozechner/pi-tui": "*",
+    "@sinclair/typebox": "*"
+  },
+  "dependencies": {
+    "vscode-languageserver-protocol": "^3.17.5"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0",
+    "@types/node": "^22.0.0"
+  }
+}

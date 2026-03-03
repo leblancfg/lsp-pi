@@ -35,6 +35,7 @@ function diagnosticsWaitMsForFile(filePath: string): number {
   if (ext === ".swift") return 20_000;
   if (ext === ".rs") return 20_000;
   if (ext === ".rb" || ext === ".erb") return 15_000;
+  if (ext === ".sql") return 15_000;
   return DIAGNOSTICS_WAIT_MS_DEFAULT;
 }
 
@@ -225,7 +226,7 @@ export default function (pi: ExtensionAPI) {
     name: "lsp",
     label: "LSP",
     description: `Query language server for definitions, references, types, symbols, diagnostics, rename, and code actions.
-Supported languages: TypeScript/JavaScript, Vue, Svelte, Dart/Flutter, Python, Go, Kotlin, Swift, Rust, Ruby.
+Supported languages: TypeScript/JavaScript, Vue, Svelte, Dart/Flutter, Python, Go, Kotlin, Swift, Rust, Ruby, dbt (SQL).
 
 Actions: definition, references, hover, signature, rename (require file + line/column or query), symbols (file, optional query), diagnostics (file), workspace-diagnostics (files array), codeAction (file + position).
 Use bash to find files: find src -name "*.ts" -type f`,

@@ -222,6 +222,7 @@ describe("LANGUAGE_IDS", () => {
     expect(LANGUAGE_IDS[".dart"]).toBe("dart");
     expect(LANGUAGE_IDS[".vue"]).toBe("vue");
     expect(LANGUAGE_IDS[".svelte"]).toBe("svelte");
+    expect(LANGUAGE_IDS[".sql"]).toBe("sql");
   });
 });
 
@@ -325,6 +326,17 @@ describe("root detection", () => {
     touch("Package.swift");
     touch("Sources/main.swift");
     expect(findRootFor(".swift", "Sources/main.swift")).toBe(tmpDir);
+  });
+
+  it("detects dbt root via dbt_project.yml", () => {
+    touch("dbt_project.yml");
+    touch("models/staging/stg_orders.sql");
+    expect(findRootFor(".sql", "models/staging/stg_orders.sql")).toBe(tmpDir);
+  });
+
+  it("returns undefined for .sql without dbt_project.yml", () => {
+    touch("queries/report.sql");
+    expect(findRootFor(".sql", "queries/report.sql")).toBeUndefined();
   });
 
   it("returns undefined when no markers present", () => {

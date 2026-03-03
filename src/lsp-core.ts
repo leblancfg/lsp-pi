@@ -79,6 +79,7 @@ export const LANGUAGE_IDS: Record<string, string> = {
   ".swift": "swift",
   ".rb": "ruby",
   ".erb": "html",
+  ".sql": "sql",
 };
 
 // ---------------------------------------------------------------------------
@@ -454,6 +455,12 @@ export const LSP_SERVERS: LSPServerConfig[] = [
       if (!proc) return undefined;
       return { process: proc };
     },
+  },
+  {
+    id: "dbt",
+    extensions: [".sql"],
+    findRoot: (f, cwd) => findRoot(f, cwd, ["dbt_project.yml"]),
+    spawn: simpleSpawn("dbt-language-server", ["--stdio"]),
   },
 ];
 

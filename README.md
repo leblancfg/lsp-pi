@@ -1,11 +1,11 @@
 # lsp-pi
 
-Language Server Protocol integration for [pi-coding-agent](https://github.com/nichochar/pi).
+Language Server Protocol integration for [pi-coding-agent](https://github.com/nichochar/pi), by [leblancfg](https://github.com/leblancfg/lsp-pi).
 
 ## What it does
 
 - **Hook** (`lsp.ts`): Automatic diagnostics after writes/edits. Default mode runs once at agent end; can also run per edit/write or be disabled.
-- **Tool** (`lsp-tool.ts`): On-demand LSP queries -- definitions, references, hover, symbols, diagnostics, signatures, rename, code actions.
+- **Tool** (`lsp-tool.ts`): On-demand LSP queries -- definitions, references, hover, symbols, diagnostics, signatures, rename, code actions. Includes dbt support for navigating refs, sources, macros, and model definitions in `.sql` files.
 - Manages one LSP server per project root, reused across turns.
 - Bounded memory: LRU cache (30 files), idle file cleanup (60s), server shutdown after 2min inactivity.
 
@@ -23,10 +23,13 @@ Language Server Protocol integration for [pi-coding-agent](https://github.com/ni
 | Swift | `sourcekit-lsp` | `Package.swift`, `*.xcodeproj` |
 | Rust | `rust-analyzer` | `Cargo.toml` |
 | Ruby | `ruby-lsp` | `Gemfile`, `.ruby-version`, `Rakefile` |
+| dbt (SQL) | `dbt-language-server` | `dbt_project.yml` |
 
 ### Known Limitations
 
 **rust-analyzer**: Very slow to initialize (30-60+ seconds) because it compiles the entire Rust project before returning diagnostics. This is a known rust-analyzer behavior. For quick feedback, consider `cargo check` directly.
+
+**dbt-language-server**: Provides dbt-specific intelligence (ref/source/macro navigation, completions, hover). Only activates for `.sql` files inside a dbt project (detected via `dbt_project.yml`). The `@fivetrandevelopers/dbt-language-server` and `j-clemons/dbt-language-server` implementations are both supported -- whichever is on your `$PATH` as `dbt-language-server`.
 
 ## Installation
 
@@ -75,6 +78,12 @@ rustup component add rust-analyzer
 
 # Ruby
 gem install ruby-lsp
+
+# dbt (option A: Fivetran/dbt-labs Node.js server)
+npm i -g @fivetrandevelopers/dbt-language-server
+
+# dbt (option B: j-clemons Go binary)
+curl -fsSL https://j-clemons.com/dbt-language-server/install | bash
 ```
 
 ## How It Works

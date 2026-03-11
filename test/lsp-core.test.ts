@@ -223,6 +223,7 @@ describe("LANGUAGE_IDS", () => {
     expect(LANGUAGE_IDS[".vue"]).toBe("vue");
     expect(LANGUAGE_IDS[".svelte"]).toBe("svelte");
     expect(LANGUAGE_IDS[".sql"]).toBe("sql");
+    expect(LANGUAGE_IDS[".nix"]).toBe("nix");
   });
 });
 
@@ -337,6 +338,23 @@ describe("root detection", () => {
   it("returns undefined for .sql without dbt_project.yml", () => {
     touch("queries/report.sql");
     expect(findRootFor(".sql", "queries/report.sql")).toBeUndefined();
+  });
+
+  it("detects Nix root via flake.nix", () => {
+    touch("flake.nix");
+    touch("nix/default.nix");
+    expect(findRootFor(".nix", "nix/default.nix")).toBe(tmpDir);
+  });
+
+  it("detects Nix root via shell.nix", () => {
+    touch("shell.nix");
+    touch("modules/foo.nix");
+    expect(findRootFor(".nix", "modules/foo.nix")).toBe(tmpDir);
+  });
+
+  it("returns undefined for .nix without flake/default/shell markers", () => {
+    touch("modules/foo.nix");
+    expect(findRootFor(".nix", "modules/foo.nix")).toBeUndefined();
   });
 
   it("returns undefined when no markers present", () => {

@@ -80,6 +80,7 @@ export const LANGUAGE_IDS: Record<string, string> = {
   ".rb": "ruby",
   ".erb": "html",
   ".sql": "sql",
+  ".nix": "nix",
 };
 
 // ---------------------------------------------------------------------------
@@ -274,6 +275,24 @@ function findRootSwift(file: string, cwd: string): string | undefined {
   return undefined;
 }
 
+function findRootNix(file: string, cwd: string): string | undefined {
+  let current = path.resolve(path.dirname(file));
+  const stop = path.resolve(cwd);
+
+  // Prefer explicit workspace roots over nested default.nix module files.
+  while (current.length >= stop.length) {
+    if (fs.existsSync(path.join(current, "flake.nix"))) return current;
+    if (fs.existsSync(path.join(current, "shell.nix"))) return current;
+
+    const parent = path.dirname(current);
+    if (parent === current) break;
+    current = parent;
+  }
+
+  // Fallback for non-flake projects.
+  return findRoot(file, cwd, ["default.nix"]);
+}
+
 // ---------------------------------------------------------------------------
 // Language-specific spawning
 // ---------------------------------------------------------------------------
@@ -461,6 +480,12 @@ export const LSP_SERVERS: LSPServerConfig[] = [
     extensions: [".sql"],
     findRoot: (f, cwd) => findRoot(f, cwd, ["dbt_project.yml"]),
     spawn: simpleSpawn("dbt-language-server", ["--stdio"]),
+  },
+  {
+    id: "nixd",
+    extensions: [".nix"],
+    findRoot: (f, cwd) => findRootNix(f, cwd),
+    spawn: simpleSpawn("nixd", []),
   },
 ];
 

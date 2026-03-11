@@ -5,7 +5,7 @@
  * document symbols, diagnostics, workspace diagnostics, rename, and code actions.
  *
  * Supported: TypeScript/JavaScript, Vue, Svelte, Dart/Flutter, Python, Go,
- *            Kotlin, Swift, Rust, Ruby.
+ *            Kotlin, Swift, Rust, Ruby, dbt (SQL), Nix.
  */
 
 import * as path from "node:path";
@@ -226,7 +226,7 @@ export default function (pi: ExtensionAPI) {
     name: "lsp",
     label: "LSP",
     description: `Query language server for definitions, references, types, symbols, diagnostics, rename, and code actions.
-Supported languages: TypeScript/JavaScript, Vue, Svelte, Dart/Flutter, Python, Go, Kotlin, Swift, Rust, Ruby, dbt (SQL).
+Supported languages: TypeScript/JavaScript, Vue, Svelte, Dart/Flutter, Python, Go, Kotlin, Swift, Rust, Ruby, dbt (SQL), Nix.
 
 Actions: definition, references, hover, signature, rename (require file + line/column or query), symbols (file, optional query), diagnostics (file), workspace-diagnostics (files array), codeAction (file + position).
 Use bash to find files: find src -name "*.ts" -type f`,

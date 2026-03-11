@@ -56,6 +56,9 @@ const WARMUP_MAP: Record<string, string> = {
   "gradle.properties": ".kt",
   "Package.swift": ".swift",
   "Gemfile": ".rb",
+  "flake.nix": ".nix",
+  "default.nix": ".nix",
+  "shell.nix": ".nix",
 };
 
 const MODE_LABELS: Record<HookMode, string> = {
